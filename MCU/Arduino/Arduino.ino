@@ -64,7 +64,7 @@ void sensorReading(){
   //获取温度
   val = analogRead(Temp_sensor);  //读取模拟原始数据     
   voltage= ( (float)val )/1023;
-  voltage *= 5;          //读取模拟原始数据       
+  voltage *= 5;                   //读取模拟原始数据       
   temp =  voltage * 100;          //将模拟值转换为实际电压 
   // Serial.print("温度：%d\n",temp);
   //获取亮度
@@ -85,7 +85,7 @@ void Txd(){
         自动控制程序
 */
 void autoMation(){
-  if(isAutoOpen = "true"){
+  if(isAutoOpen == "true"){
     if(isAutoFanOpen = "true")
       autoFan( isAutoPowerOpen , autoFanValue );
     if(isAutoLedOpen = "true")
@@ -105,9 +105,9 @@ void Rxd(){
    if (serial_received.length() > 0)
     {
        int i,flag,count=0;
-       Serial.println("serial_received:");
-       Serial.println(serial_received);
-       Serial.println("\n");
+      //  Serial.println("serial_received:");
+      //  Serial.println(serial_received);
+      //  Serial.println("\n");
          /*
         自动化设置解析
         */
@@ -119,8 +119,10 @@ void Rxd(){
           isAutoLedOpen = "";
           autoLedvalue = "";
           for(i=0;i<serial_received.length();i++){
-            if(serial_received[i]=='#') 
+            if(serial_received[i]=='#') {
               count++; //接收第count个参数
+              i++;//跳过当前为#的参数
+            }
             switch(count){
               case 1: isAutoOpen += serial_received[i];      break;
               case 2: isAutoPowerOpen += serial_received[i]; break;
