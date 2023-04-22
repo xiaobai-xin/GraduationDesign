@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/automation/automation",
+    "pages/me/me",
+    "pages/password/password"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "智能教室控制系统",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "white",
+    "selectedColor": "#000000",
+    "backgroundColor": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "控制"
+      },
+      {
+        "pagePath": "pages/automation/automation",
+        "text": "自动化"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

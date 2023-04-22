@@ -1,0 +1,37 @@
+<view class="fuc1">
+ <text> 开启自动化</text>  
+ <switch bindchange="automationSwitch"></switch>
+</view>
+<view class="fuc1">
+  <text> 教室无人时自动断电</text>
+  <switch bindchange="autoPowerSwitch"></switch>
+</view>
+<!-- 风扇设置 -->
+<view class="fun2">
+  <view class="fun2_switch">
+    <text>是否自动开启风扇</text>   
+  <switch bindchange="autoFanSwitch"></switch>
+  </view>  
+  <view class="section section_gap">
+        <text class="section__title">设置自动开启风扇的温度 当前设定：{{autoFanValue}}°C</text>
+        <slider bindchange="fan_slider" step="1" value="0" max="30" min="20"/>
+  </view>
+</view>
+<!-- 风扇设置 -->
+<view class="fun2">
+  <view class="fun2_switch">
+    <text>是否自动开灯</text>   
+  <switch bindchange="autoLedSwitch"></switch>
+  </view>  
+  <view class="section section_gap">
+        <text class="section__title">设置自动开灯的亮度 当前设定：{{autoLedvalue}} lum</text>
+        <slider bindchange="led_slider" step="5" value="0"/>
+  </view>
+</view>
+
+
+
+<!-- 提交按钮 -->
+<view class="sub">
+    <button type="primary" bindtap="submit">提交更改</button>
+  </view>

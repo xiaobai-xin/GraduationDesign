@@ -1,0 +1,46 @@
+/* pages/me/me.wxss */
+/* 以下为自定义部分 */
+.information{
+  margin: 10px;
+  border-radius: 20px ;
+  background-color: aquamarine;  
+  height:450px;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;   
+  align-items:center;   
+}
+.icon-img
+{
+  width: 90px;  
+  height: 90px;
+  border-radius: 50%;
+}
+.icon-name{
+  color: #000;
+  margin:10px;
+}
+
+.slider-style {
+  margin: 10px;
+  margin-left: 20px;
+  margin-right: 16px;
+}
+input{
+  width: 100%;
+  border: 1px solid #d7dae1;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  min-height: 64rpx;
+  margin-bottom: 20rpx;
+}
+.loginBtn{
+  margin: 10px;
+  min-width: 300px;
+}
+
+.sub{
+  margin: 0%;
+}

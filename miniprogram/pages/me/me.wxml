@@ -1,0 +1,32 @@
+<!--pages/me/me.wxml-->
+<view class="information">
+  <!-- <image class="icon-img" src='/utils/img/icon.jpg' mode="scaleToFill"></image> -->
+  <image class="icon-img" src="{{imgUrl}}" mode="scaleToFill"></image>
+  <view class="icon-name">{{username}}</view>
+  <view class="itemView">学号/员工号：
+      <input class="input" name="userName" placeholder="请输入学号/员工号"
+      bindinput="userNameInput" model:value="{{ formData.username }}" />
+  </view>
+  <view class="itemView">密    码：
+      <input class="input" password placeholder="请输入密码"
+      bindinput="passWdInput" model:value="{{ formData.password }}"/>
+  </view>
+   
+    <checkbox-group bindchange="onChange">
+      <checkbox value="1" checked="{{formData.checked}}" />
+      <label for="check">记住密码</label>
+    </checkbox-group>
+  
+
+    <navigator class='reset' url="../password/password">修改密码</navigator>
+
+    <view class="sub">
+    <button class="loginBtn" type="primary" bindtap="loginBtnClick">登录</button>
+    </view>
+    <view class="sub">
+    <button class="loginBtn" type="warn" bindtap="exitBtnClick">退出登录</button>
+    </view>
+   
+
+</view>
+

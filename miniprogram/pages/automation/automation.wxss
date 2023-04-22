@@ -1,0 +1,39 @@
+/* pages/automation.wxss */
+text{
+  padding: 5%;
+}
+.container{
+  margin-top: -20px;
+}
+
+.fuc1{
+  margin: 10px;
+  border-radius: 20px ;
+  background-color: aquamarine;  
+  height:50px;
+  display: flex;
+  justify-content: space-between; 
+  align-items:center;  
+}
+
+
+
+.fun2{
+  margin: 10px;
+  border-radius: 20px ;
+  background-color: aquamarine;  
+  height:140px;
+  display:block;
+  align-items:center;  
+}
+
+.fun2_switch{
+  display:flex;
+  justify-content: space-between; 
+  align-items:center;  
+}
+
+.sub{
+  padding-left: 3%;
+  padding-right: 3%;
+}
