@@ -1,5 +1,5 @@
 {
-  "projectname": "wechat-mqtt-demo",
+  "projectname": "miniprogram",
   "setting": {
     "compileHotReLoad": true,
     "urlCheck": false
