@@ -1,5 +1,4 @@
 const http = require('http')
-const querystring = require('querystring')
 var mysql = require('mysql');  
 var JSONStr = '';
 
