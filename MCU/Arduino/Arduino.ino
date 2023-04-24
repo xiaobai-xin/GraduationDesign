@@ -24,9 +24,11 @@ float val;
 float voltage=0;
 int lum_set;//设定亮度
 int speed_set;//设定速度
+
 int temp;//温度
 int lum;//亮度
-
+int fanSpeed;//当前转速
+int lightLum;//当前
 void setup() {
   Serial.begin(9600);
 }
@@ -45,6 +47,7 @@ void loop() {
 */
 void fanSet(int value){
   value *= 2.55;
+  fanSpeed = value;
   analogWrite(analog_fan, value);
 }
 /*
@@ -53,6 +56,7 @@ void fanSet(int value){
 */
 void lightSet(int value){
   value *= 2.55;
+  lightLum = value;
   analogWrite(analog_fan, value);
 }
 
@@ -62,11 +66,13 @@ void lightSet(int value){
 */
 void sensorReading(){
   //获取温度
-  val = analogRead(Temp_sensor);  //读取模拟原始数据     
+  val = analogRead(Temp_sensor);  //读取模拟原始数据    
+  // Serial.print(val); Serial.print("\n"); 
   voltage= ( (float)val )/1023;
   voltage *= 5;                   //读取模拟原始数据       
   temp =  voltage * 100;          //将模拟值转换为实际电压 
-  // Serial.print("温度：%d\n",temp);
+  // Serial.print('temp:%d\n',temp);  
+  Serial.print(temp); Serial.print("\n"); 
   //获取亮度
   lum = analogRead(analog_lum);
   // Serial.print("亮度：%d\n",lum);
@@ -74,11 +80,11 @@ void sensorReading(){
 
 /*
         数据发送
-        封装格式  #亮度#温度#电灯状态#风扇状态
+        封装格式  #亮度#温度#当前电灯亮度#当前风扇转速
 */
 void Txd(){
-  String  msg = "#" + (String)lum + "#" + (String)temp; 
-  Serial.print(msg);
+  String  msg = "#" + (String)lum + "#" + (String)temp + "#" + (String)lightLum + "#" + (String)fanSpeed; 
+  // Serial.print(msg);
 }
 
 /*

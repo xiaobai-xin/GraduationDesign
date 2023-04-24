@@ -68,19 +68,13 @@ App({
       this.setValue("conenctBtnText", "连接成功");
       //订阅主题
       this.data.client.subscribe(this.data.subTopic);
-
       this.data.client.on("message", (topic, payload) => {
-        // wx.showModal({
-        //   content: `收到消息 - Topic: ${topic}，Payload: ${payload}`,
-        //   showCancel: false,
-        // });
         //数据封装拆解部分
         var  msg = payload.toString();
         var mqtt_Data = msg.split("#");
         this.setValue("temp",mqtt_Data[0]);
         this.setValue("lum",mqtt_Data[1]);
         console.log("msg is arrived ")
-
       });
 
       this.data.client.on("error", (error) => {
