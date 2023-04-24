@@ -37,6 +37,27 @@ function changePwd(setID,setPwd){
         }
     });
 }
+//获取教室控制权限
+function gainClassroom(ID,room){
+    var sql = 'SELECT classroom FROM users WHERE id = ' + '\u0022' + ID + '\u0022';//
+    connection.query(sql,function (err, result) {
+        if(err){
+            console.log('[SELECT ERROR] - ',err.message);
+            return 0;
+        }
+        if(result=='')
+        {
+            return 0;
+        }
+        else
+        {
+            let str = result.toString()
+            if(str.indexOf(room) != -1)
+            return 1;
+            
+        }
+    });
+}
 // 处理POST请求
 const server = http.createServer((req, res) => {
     console.log('req content-type:', req.headers['content-type'])
@@ -49,10 +70,10 @@ const server = http.createServer((req, res) => {
         console.log('postData:', postData)
         let user = postData.split('\u0022')[3]
         let pwd = postData.split('\u0022')[7]
-        let isChangePwd = postData.split('\u0022')[9]
-        let newPwd = postData.split('\u0022')[11]
+        let action = postData.split('\u0022')[9] //操作类型：newPwd更改密码 或 classroom查询教室访问权限
+        let Parameter = postData.split('\u0022')[11]
         var  sql = 'SELECT name,type,profile_photo FROM users WHERE id = ' + '\u0022' + user + '\u0022' +' AND'+ ' pwd = ' + '\u0022' + pwd + '\u0022';//\u0022为双引号转义字符
-        //执行SQL查询语句
+        //先检查用户名密码是否正确
         connection.query(sql,function (err, result) {
             if(err){
             console.log('[SELECT ERROR] - ',err.message);
@@ -66,12 +87,22 @@ const server = http.createServer((req, res) => {
             else
             {
                 //请求更改密码
-                if(isChangePwd=='newPwd'){
-                    if(changePwd(user,newPwd)==1){
+                if(action=='newPwd'){
+                    if(changePwd(user,Parameter)==1){
                         res.end("success");
                      }
                     else{
-                        res.end("success");
+                        res.end("fail");
+                    }
+                    return
+                }
+                //获取教室控制权限
+                else if(action=='classroom'){
+                    if(gainClassroom(user,Parameter)==1){
+                        res.end("pass");
+                     }
+                    else{
+                        res.end("fail");
                     }
                     return
                 }

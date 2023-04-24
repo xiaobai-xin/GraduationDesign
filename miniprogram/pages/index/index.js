@@ -170,29 +170,61 @@ LED_slider:function(e) {
   this.publish();
 },
 
+//教室选择
+setClassroom(room){
+  if(app.data.isLogin!="true"){
+    wx.showModal({
+      title: '提示',
+      content: '您未登录',
+    })
+  }
+  else if(app.data.userType=="th"){
+    setAppValue("subTopic","classroom_" + string(room))
+    setAppValue("pubTopic","miniprogram_" + string(room))
+  }
+  else{
+    wx.request({
+      url: 'https://bishe.xiaobai1103.cn',
+      // url: 'http://127.0.0.1:8000',
+      method:"POST",
+      data:{
+        user:app.data.userID,
+        pwd:app.data.passWd,
+        classroom:room
+      },
+      success:(res)=>{
+        if(res.data=="pass"){
+          setAppValue("subTopic","classroom_" + string(room))
+          setAppValue("pubTopic","miniprogram_" + string(room))
+        }
+        else{
+          wx.showModal({
+            title: '提示',
+            content: '您没有当前教室的控制权限',
+          })
+        }
+      }
+    })
+ }
 
+},
 
 
 // 教室选择
 bindPickerChange_classroom:function (e) {
   if(e.detail.value==0)
   {
-    setAppValue("subTopic","classroom_101")
-    setAppValue("pubTopic","miniprogram_101")
+    this.setClassroom(101)
   }
   if(e.detail.value==1)
   {
-
-    this.data.subTopic="classroom_102";
-    this.data.pubTopic= "miniprogram_102";
+    this.setClassroom(102)
   } if(e.detail.value==2)
   {
-    this.data.subTopic="classroom_103";
-    this.data.pubTopic= "miniprogram_103";
+    this.setClassroom(103)
   } if(e.detail.value==3)
   {
-    this.data.subTopic="classroom_104";
-    this.data.pubTopic= "miniprogram_104";
+    this.setClassroom(104)
   }
 },
 // 推送
