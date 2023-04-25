@@ -2,32 +2,30 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include <SoftwareSerial.h>
-/*WiFi*/
-const char *ssid = "Redmi K40"; // Enter your WiFi name
-const char *password = "btx2000113";  // Enter WiFi password
-
-/*MQTT Broker*/
+//WIFI
+const char *ssid = "Redmi K40";
+const char *password = "btx2000113";
+//MQTT Broker
 const char *mqtt_broker = "mqtt.xiaobai1103.cn";
 const char *topic_pub = "classroom_101";
 const char *topic_sub = "miniprogram_101";//订阅101教室的
 const char *mqtt_username = "emqx";
 const char *mqtt_password = "public";
 const int mqtt_port = 1883;
-
-/* 软串口 */
+//软串口
 SoftwareSerial serial_arduino(D7,D8);//RX,TX
 String UART_String="";//软串口缓存
 String miniprogram_received="";//接收数据缓存
-
+//创建连接对象
 WiFiClient espClient;
 PubSubClient client(espClient);
-
+/*
+        初始化
+*/
 void setup() {
     serial_arduino.begin(9600);
     serial_arduino.listen();
-    // Set software serial baud to 115200;
     Serial.begin(115200);
-    // connecting to a WiFi network
     WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
@@ -53,57 +51,38 @@ void setup() {
     client.publish(topic_pub, "hello emqx");
     client.subscribe(topic_sub);
 }
-
+/*
+        MQTT消息接收
+*/
 void callback(char *topic_pub, byte *payload, unsigned int length) {
     Serial.print("Message arrived in topic: ");
     Serial.println(topic_pub);
     Serial.print("Message:");
     for (int i = 0; i < length; i++) {
-        //Serial.print((char) payload[i]);
       miniprogram_received += (char) payload[i];
-      
     }
       serial_arduino.print(miniprogram_received);
       Serial.print(miniprogram_received);
       miniprogram_received="";
-     
-
-    Serial.println();
-    Serial.println("-----------------------");
+      Serial.println();
+      Serial.println("-----------------------");
 }
 
-// void callback(char* topic_sub, byte* payload, unsigned int length) {
-//   Serial.print("Message arrived [");
-//   Serial.print(topic_sub);
-//   Serial.print("] ");
-//   String Mqtt_Buff = "";
-//   for (int i = 0; i < length; i++) {
-//     Mqtt_Buff += (char)payload[i];
-//   }
-//   Serial.print(Mqtt_Buff);
-//   Serial.println();
-//   Mqtt_Buff = "";
-// }
-
-
-void mqttPub()//数据上报
+/*
+        数据上报
+*/
+void mqttPub()
 {
-
-char msg[100];
-// sprintf(msg, "{%c}", UART_String);
-const char *buff = UART_String.c_str();//string类型要转化为c字符串下的字符串类型才行，而且string 类型是常量字符串，所以要name2是const类型
-sprintf(msg,"%s",buff);
-client.publish(topic_pub, msg);
-Serial.print("数据上报:");
-Serial.print(msg);
-Serial.print("\n");
-
-UART_String=""; //清空缓存
+  char msg[100];
+  const char *buff = UART_String.c_str();//string类型要转化为c字符串下的字符串类型才行，而且string 类型是常量字符串，所以要name2是const类型
+  sprintf(msg,"%s",buff);
+  client.publish(topic_pub, msg);
+  Serial.print("数据上报:");
+  Serial.print(msg);
+  Serial.print("\n");
+  UART_String=""; //清空缓存
 
 }
-
-
-
 
 void loop() {
     if(serial_arduino.available()>0)
@@ -118,7 +97,6 @@ void loop() {
       Serial.print("serial_arduino data:");
       Serial.println(UART_String);
       mqttPub();
-
        }
   }
  client.loop();   

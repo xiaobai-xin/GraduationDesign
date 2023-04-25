@@ -1,7 +1,6 @@
 /*
     date: 20 Apr,2023
 */
-
 // 定义引脚
 #define analog_fan A1//风扇pwm
 #define analog_light 3//电灯pwm
@@ -9,7 +8,7 @@
 #define body_sensor 4//红外
 #define Temp_sensor A3 //温度传感器接口
 //串口变量
-String serial_received;//串口接受
+String serial_received;//串口接收缓存
 //状态变量
 String led_lum = "";
 String fan_speed = "";
@@ -19,16 +18,12 @@ String isAutoFanOpen = "";
 String autoFanValue = "";
 String isAutoLedOpen = "";
 String autoLedvalue = "";
-//传感器变量
-float val;
-float voltage=0;
-int lum_set;//设定亮度
-int speed_set;//设定速度
-
+//教室环境信息
 int temp;//温度
 int lum;//亮度
+//当前控制设定
 int fanSpeed;//当前转速
-int lightLum;//当前
+int lightLum;//当前亮度
 void setup() {
   Serial.begin(9600);
 }
@@ -60,22 +55,19 @@ void lightSet(int value){
   analogWrite(analog_fan, value);
 }
 
-
 /*
         传感器信息读取
 */
 void sensorReading(){
   //获取温度
+  float val;
+  float voltage=0;
   val = analogRead(Temp_sensor);  //读取模拟原始数据    
-  // Serial.print(val); Serial.print("\n"); 
   voltage= ( (float)val )/1023;
   voltage *= 5;                   //读取模拟原始数据       
   temp =  voltage * 100;          //将模拟值转换为实际电压 
-  // Serial.print('temp:%d\n',temp);  
-  // Serial.print(temp); Serial.print("\n"); 
   //获取亮度
   lum = analogRead(analog_lum);
-  // Serial.print("亮度：%d\n",lum);
 }
 
 /*
@@ -158,12 +150,14 @@ void Rxd(){
       /*
         亮度设定值解析
       */
+       int lum_set;//设定亮度
        lum_set = atoi(led_lum.c_str());//string转int
        led_lum = "";//亮度缓存清空
        lightSet(lum_set);
       /*
         风扇设定转速解析
       */
+       int speed_set;//设定速度
        speed_set = atoi(fan_speed.c_str());//string转int
        fan_speed = "";//转速缓存清空
        fanSet(speed_set);
