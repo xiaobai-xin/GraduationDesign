@@ -1,10 +1,6 @@
 // pages/automation.js
 const app = getApp();
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     /*
           要发送的信息
@@ -16,15 +12,18 @@ Page({
     autoFanValue : "",
     isAutoLedOpen : "",
     autoLedvalue : "",
-
   },
-
-
+/*
+    修改本页面的data
+*/
   setValue(key, value) {
     this.setData({
       [key]: value,
     });
   },
+/*
+        自动化方法
+*/
   //开启自动化
   automationSwitch : function (e) {
     this.setValue("isAutoOpen",e.detail.value)
@@ -41,8 +40,6 @@ Page({
   autoLedSwitch : function (e) {
     this.setValue("isAutoLedOpen",e.detail.value)
   },
-
-
   // 开启风扇转速
   fan_slider:function(e) {
     console.log(e.detail.value);
@@ -53,7 +50,9 @@ Page({
     console.log(e.detail.value);
     this.setValue("autoLedvalue", e.detail.value);//转速存入缓存
   },
-  //提交按钮事件
+/*
+        提交按钮事件
+*/
   submit : function(){
     if(app.data.isLogin == 'true')
     {

@@ -2,53 +2,44 @@
 <view class="information">
   <image class="icon-img" src="{{imgUrl}}" mode="scaleToFill"></image>
   <view class="icon-name">{{username}}</view>
-  
 </view>
-
 <view class="container">
 <!-- 教室选择 -->
-
   <picker class="classroom_picker" bindchange="bindPickerChange_classroom" value="{{index}}" range="{{array}}">
     <view class="picker">
       当前教室：{{array[index]}}
     </view>
   </picker>
-
-<!-- 连接控制 -->
-
+  <!-- 连接控制 -->
   <view class="is-flex">
     <button type="primary" bindtap="connect">{{ conenctBtnText }}</button>
-    <button type="warn" disabled="{{ conenctBtnText === '连接' }}" bindtap="unsubscribe">断开连接</button>
+    <button type="warn" disabled="{{ conenctBtnText === '连接' }}" bindtap="disconnect">断开连接</button>
   </view>
-
-
-<!-- 数值显示 -->
+  <!-- 数值显示 -->
   <van-cell-group>
     <van-cell title="当前温度" value="{{temp}} ℃" />
     <van-cell title="当前亮度" value="{{lum}} lum" />
   </van-cell-group>
-
-<!--控制按钮-->
-<van-cell  title="灯"  >  
-<van-switch checked="{{ checked_led }}" size="24px" bind:change="onChange_light" />
-</van-cell>
-<van-cell  title="风扇"  >  
-<van-switch checked ="{{ checked_fan }}" size="24px" bind:change="onChange_fan" />
-</van-cell>
-<!-- 风扇滑块 -->
-<view class="section section_gap">
-            <text class="section__title">风扇转速 当前设定值{{fan_speed}}</text>
-            <view class="body-view"></view>
-                <slider bindchange="fan_slider" step="5" value="{{ fan_speed }}"/>
-            </view>
-
-<!-- LED滑块 -->
-<view class="section section_gap">
-            <text class="section__title">LED亮度 当前设定值{{LED_lum}}</text>
-            <view class="body-view"></view>
-                <slider bindchange="LED_slider" step="5" value="{{ LED_lum }}"/>
-            </view>
-        </view>
+  <!--控制按钮-->
+  <van-cell  title="灯"  >  
+    <van-switch checked="{{ checked_led }}" size="24px" bind:change="onChange_light" />
+  </van-cell>
+  <van-cell  title="风扇"  >  
+    <van-switch checked ="{{ checked_fan }}" size="24px" bind:change="onChange_fan" />
+  </van-cell>
+  <!-- 风扇滑块 -->
+  <view class="section section_gap">
+              <text class="section__title">风扇转速 当前设定值{{fan_speed}}</text>
+              <view class="body-view"></view>
+                  <slider bindchange="fan_slider" step="5" value="{{ fan_speed }}"/>
+              </view>
+  <!-- LED滑块 -->
+  <view class="section section_gap">
+              <text class="section__title">LED亮度 当前设定值{{LED_lum}}</text>
+              <view class="body-view"></view>
+                  <slider bindchange="LED_slider" step="5" value="{{ LED_lum }}"/>
+              </view>
+</view>
 
 
 

@@ -2,7 +2,6 @@
   margin-top: -20px;
 }
 
-
 input,
 .received-msg-box {
   width: 100%;

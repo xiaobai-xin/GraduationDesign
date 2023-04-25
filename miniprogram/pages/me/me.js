@@ -15,6 +15,9 @@ Page({
     checked: false,
   },
   },
+/*
+          用于记住密码的自动载入
+*/
   onLoad: function (options) {
     this.setData({
       'formData.username': wx.getStorageSync("formData").username,
@@ -22,7 +25,6 @@ Page({
       'formData.checked': wx.getStorageSync('formData').checked
     })
   },
-
 
 /*  
         修改app.js中的data
@@ -64,7 +66,9 @@ loginBtnClick:function(){
     this.login();
   }
 },
-//登录
+/*  
+        登录
+*/ 
 login() {
   // 如果勾选"记住密码"选框则存储登录信息，反之则清空存储的信息
   this.data.formData.checked == true ? wx.setStorageSync("formData", this.data.formData) : wx.setStorageSync("formData", "");
@@ -102,8 +106,9 @@ login() {
     }
   })
 },
-
-// 记住密码框事件方法
+/*  
+        记住密码框事件
+*/ 
 onChange(e) {
   this.setData({
     'formData.checked': e.detail.value.includes('1')

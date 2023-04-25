@@ -28,9 +28,6 @@
         <slider bindchange="led_slider" step="5" value="0"/>
   </view>
 </view>
-
-
-
 <!-- 提交按钮 -->
 <view class="sub">
     <button type="primary" bindtap="submit">提交更改</button>
