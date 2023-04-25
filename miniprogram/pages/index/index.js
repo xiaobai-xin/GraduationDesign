@@ -144,29 +144,35 @@ this.setData({
 },
 // 风扇开关
 onChange_fan({ detail }){
-//detail是滑块的值，检查是打开还是关闭，并更换正确图标
-this.setData({ 
-checked_fan: detail,
-});
-if(detail == true){
-this.setValue("fan_speed", "100");//转速存入缓存
-}else{
-this.setValue("fan_speed", "0");//转速存入缓存
-}
-this.publish();
-},
-// 风扇转速控制
-fan_slider:function(e) {
-  console.log(e.detail.value);
-  this.setValue("fan_speed", e.detail.value);//转速存入缓存
-  // var  msg = e.detail.value.toString();
+  //detail是滑块的值，检查是打开还是关闭，并更换正确图标
+  this.setData({ 
+    checked_fan: detail,
+  });
+  if(detail == true){
+    this.setValue("fan_speed", "100");//转速存入缓存
+
+  }
+  else{
+    this.setValue("fan_speed", "0");//转速存入缓存
+  }
   this.publish();
 },
-// LED亮度控制
+// 风扇转速控制滑块
+fan_slider:function(e) {
+  this.setValue("fan_speed", e.detail.value);//转速存入缓存
+  if(e.detail.value)//开启风扇滑块
+    this.setValue("checked_fan", true);
+  else  //关闭风扇滑块
+    this.setValue("checked_fan", false);//转速存入缓存
+  this.publish();
+},
+// LED亮度控制滑块
 LED_slider:function(e) {
-  console.log(e.detail.value);
-  this.setValue("LED_lum", e.detail.value);//转速存入缓存
-  // var  msg = e.detail.value.toString();
+  this.setValue("LED_lum", e.detail.value);//亮度存入缓存
+  if(e.detail.value)//开启LED滑块
+    this.setValue("checked_led", true);
+  else  //关闭LED滑块
+    this.setValue("checked_led", false);//亮度存入缓存
   this.publish();
 },
 

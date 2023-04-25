@@ -39,14 +39,14 @@
 <view class="section section_gap">
             <text class="section__title">风扇转速 当前设定值{{fan_speed}}</text>
             <view class="body-view"></view>
-                <slider bindchange="fan_slider" step="5" value="0"/>
+                <slider bindchange="fan_slider" step="5" value="{{ fan_speed }}"/>
             </view>
 
 <!-- LED滑块 -->
 <view class="section section_gap">
             <text class="section__title">LED亮度 当前设定值{{LED_lum}}</text>
             <view class="body-view"></view>
-                <slider bindchange="LED_slider" step="5" value="0"/>
+                <slider bindchange="LED_slider" step="5" value="{{ LED_lum }}"/>
             </view>
         </view>
 
