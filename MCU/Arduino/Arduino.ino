@@ -46,8 +46,8 @@ void loop() {
         输入值为0~100 (映射到0~255)
 */
 void fanSet(int value){
-  value *= 2.55;
   fanSpeed = value;
+  value *= 2.55;
   analogWrite(analog_fan, value);
 }
 /*
@@ -55,8 +55,8 @@ void fanSet(int value){
         输入值为0~100 (映射到0~255)
 */
 void lightSet(int value){
-  value *= 2.55;
   lightLum = value;
+  value *= 2.55;
   analogWrite(analog_fan, value);
 }
 
@@ -72,7 +72,7 @@ void sensorReading(){
   voltage *= 5;                   //读取模拟原始数据       
   temp =  voltage * 100;          //将模拟值转换为实际电压 
   // Serial.print('temp:%d\n',temp);  
-  Serial.print(temp); Serial.print("\n"); 
+  // Serial.print(temp); Serial.print("\n"); 
   //获取亮度
   lum = analogRead(analog_lum);
   // Serial.print("亮度：%d\n",lum);
@@ -84,7 +84,7 @@ void sensorReading(){
 */
 void Txd(){
   String  msg = "#" + (String)lum + "#" + (String)temp + "#" + (String)lightLum + "#" + (String)fanSpeed; 
-  // Serial.print(msg);
+  Serial.print(msg);Serial.print("\n");
 }
 
 /*
@@ -139,17 +139,20 @@ void Rxd(){
             } 
           }
         }
+        else{
         /*
         控制信息解析
         */
-       for(i=0;i<serial_received.length();i++)
-       {
-         if(serial_received[i]=='#')
-            flag = 1; //0 ：第一个参数  1：第二个参数
-         if(flag==0)
-           led_lum += char(serial_received[i]);  //装入亮度
-         if(flag==1&&serial_received[i]!='#')
-           fan_speed += char(serial_received[i]);  //装入转速
+        flag=0;
+        for(i=0;i<serial_received.length();i++)
+        {
+          if(serial_received[i]=='#')
+              flag = 1; //0 ：第一个参数  1：第二个参数
+          if(flag==0)
+            led_lum += char(serial_received[i]);  //装入亮度
+          if(flag==1&&serial_received[i]!='#')
+            fan_speed += char(serial_received[i]);  //装入转速
+        }
        }
        serial_received = "";
       /*

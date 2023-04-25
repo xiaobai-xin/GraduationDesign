@@ -31,8 +31,9 @@ Page({
     fan:" ",//风扇的状态,默认关闭
     pubMsg: " ",
     receivedMsg: "",
-    temp:"100",//温度值
-    lum:"100",//亮度值
+    temp:"",//温度值
+    lum:"",//亮度值
+    //arduino当前的转速亮度设置
  
     //要推送的内容
     fan_speed:"0",//设置的转速值
@@ -243,8 +244,11 @@ onLoad:function(options){
   setInterval(() =>{
     this.setData({
       "temp": app.data.temp,
+      "lum": app.data.lum,
       "username":app.data.userName,
-      "imgUrl":app.data.userImg
+      "imgUrl":app.data.userImg,
+      "fan_speed":app.data.speedSet,//当前单片机设定值
+      "LED_lum":app.data.lumSet//当前单片机设定值
     });
   },1000)
 },

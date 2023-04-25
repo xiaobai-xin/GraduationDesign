@@ -20,7 +20,8 @@ App({
     //接收的亮度值存这里，由页面刷新获取
     temp:"",//温度值
     lum:"",//亮度值
- 
+    speedSet:"",//当前单片机设定值
+    lumSet:"",//当前单片机设定值
     mqttOptions: {
       username: "test",
       password: "test",
@@ -32,7 +33,7 @@ App({
     //注册登录部分
     
     isLogin: 'true',//登录状态
-    isLogin: 'false',//默认登录状态
+    // isLogin: 'false',//默认登录状态
     userName: '您未登录',//默认用户名
     userID:'',//学号、员工号
     userType:'',
@@ -71,9 +72,12 @@ App({
       this.data.client.on("message", (topic, payload) => {
         //数据封装拆解部分
         var  msg = payload.toString();
+        console.log(msg)
         var mqtt_Data = msg.split("#");
-        this.setValue("temp",mqtt_Data[0]);
+        this.setValue("temp",mqtt_Data[2]);
         this.setValue("lum",mqtt_Data[1]);
+        this.setValue("lumSet",mqtt_Data[3]);
+        this.setValue("speedSet",mqtt_Data[4]);
         console.log("msg is arrived ")
       });
 
