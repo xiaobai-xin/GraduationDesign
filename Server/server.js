@@ -2,7 +2,7 @@ const http = require('http')
 const mysql = require('mysql2/promise');
 var JSONStr = '';
 var userInfor = '';
-//登录信息
+//登录信息(连接内容已省略)
 sqlInfor = {
     host: "",
     user: "",
@@ -63,11 +63,9 @@ async function gainClassroom(ID,room){
             if(str.indexOf(room) != -1){  //有权限
                     return 1;
             }
-                
              else{
                     return 0;   //无权限
              }
-                
         }
     }
     catch (error) {  
@@ -89,7 +87,6 @@ const server = http.createServer((req, res) => {
         let action = postData.split('\u0022')[9]; //操作类型：newPwd更改密码 或 classroom查询教室访问权限
         let Parameter = postData.split('\u0022')[11];
         //登录部分
-        console.log('user');console.log(user);console.log('pwd');console.log(pwd);
         userInfor = await userCheck(user,pwd);//拉取用户信息
         if(userInfor == 'error'){  
             res.end("fail");
@@ -128,4 +125,3 @@ const server = http.createServer((req, res) => {
     })
 })
 server.listen(8000)
-console.log('GET OK~~~')
