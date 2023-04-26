@@ -24,6 +24,7 @@ Page({
     client: null,
     conenctBtnText: "连接",
     host: "mqtt.xiaobai1103.cn",
+    classroom:"",
     subTopic: "classroom_101",  //订阅主题,默认订阅对象为101教室 
     pubTopic: "miniprogram_101",  //发布主题，默认控制对象为101教室
     checked_led: false,//led的状态,默认关闭
@@ -143,6 +144,7 @@ setClassroom(room){
     setAppValue("pubTopic","miniprogram_" + string(room))
   }
   else{
+    room = String(room)
     wx.request({
       url: 'https://bishe.xiaobai1103.cn',
       // url: 'http://127.0.0.1:8000',
@@ -154,8 +156,12 @@ setClassroom(room){
       },
       success:(res)=>{
         if(res.data=="pass"){
-          setAppValue("subTopic","classroom_" + string(room))
-          setAppValue("pubTopic","miniprogram_" + string(room))
+          wx.showModal({
+            title: '提示',
+            content: '您可以控制当前教室啦~',
+          })
+          this.setAppValue("subTopic","classroom_" + String(room))
+          this.setAppValue("pubTopic","miniprogram_" + String(room))
         }
         else{
           wx.showModal({
@@ -166,7 +172,6 @@ setClassroom(room){
       }
     })
  }
-
 },
 /*
           教室选择
