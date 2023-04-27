@@ -46,8 +46,7 @@ Page({
     //超时检查
     isPubCheck:false,//更新检查开关
     pubCount:0,       //计时
-    published_LED:"", //已发消息
-    published_FAN:"", //已发消息
+
     timeout:10        //超时时间10秒
   },
 /*
@@ -214,8 +213,6 @@ bindPickerChange_classroom:function (e) {
 publish() {
   let msg = this.data.LED_lum + '#' + this.data.fan_speed;
   app.publish(msg);
-  this.data.published_LED = this.data.LED_lum;
-  this.data.published_FAN = this.data.fan_speed;
   this.data.isPubCheck == true;
 },
 /*
@@ -235,10 +232,10 @@ onLoad:function(options){
       this.dataInit();
       this.data.dataInit=true;//页面数据已初始化
     }
-    //检查单片机数据是否需要检查
-    // if(this.data.isPubCheck == true){
-    //   this.pubCheck();
-    // }
+    // 检查单片机数据是否需要检查
+    if(this.data.isPubCheck == true){
+      this.pubCheck();
+    }
     
   },1000)
 },
@@ -276,7 +273,7 @@ dataInit(){
           超时检查
 */
 pubCheck(){
-  if(this.data.published_LED == app.data.lumSet&&this.data.published_FAN == app.data.speedSet){
+  if(this.data.LED_lum == app.data.lumSet&&this.data.fan_speed == app.data.speedSet){
     this.data.isPubCheck = false;//完成检查
     this.data.pubCount = 0;
   }
@@ -285,18 +282,23 @@ pubCheck(){
       this.data.pubCount += 1;
     }
     else{
+      //已超时
+      this.data.pubCount = 0;
+      this.data.isPubCheck = false;//完成检查
+      //将控制量设为当前单片机的状态
+      this.setValue('fan_speed',app.data.speedSet)
+      this.setValue('LED_lum',app.data.lumSet)
       wx.showModal({
         title: '提示',
         content: '数据更新失败',
       })
-      //恢复之前的数据
-      app.data.lumSet == this.data.published_LED;
-      app.data.speedSet == this.data.published_FAN;
     }
-   
   }
 },
-
+/*
+          是否允许更新数据
+          只有上个数据已经上传的情况下才允许更新
+*/
 allowUpdate(){
   //上一个数据已经完成更新
   if(this.data.isPubCheck == false)
