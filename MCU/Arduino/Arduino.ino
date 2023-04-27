@@ -189,10 +189,12 @@ void autoTemp(int value){
 void autoFan(String power,String value){
   int v = atoi(value.c_str());//目标温度值 v的范围是20°C~30°C
   if(power == "true"){  //自动电源开启
-    if(digitalRead(body_sensor) == HIGH)//有人
-      autoTemp(v);
-    else
-      fanSet(0);
+    if(digitalRead(body_sensor) == HIGH)
+      delay(200);
+      if(digitalRead(body_sensor) == HIGH)//有人
+        autoTemp(v);
+      else
+        fanSet(0);
     }
   else
     autoTemp(v);
@@ -223,10 +225,12 @@ void autoLed(String power,String value){
   int differ;//差值
   int v = atoi(value.c_str());//目标亮度值
   if(power == "true"){  //自动电源开启
-    if(digitalRead(body_sensor) == HIGH)//有人
-      autoLum(v);
-    else
-      lightSet(0);
+    if(digitalRead(body_sensor) == HIGH)
+        delay(200);
+        if(digitalRead(body_sensor) == HIGH)//有人
+          autoLum(v);
+        else
+          lightSet(0);
     }
   else
     autoLum(v);
