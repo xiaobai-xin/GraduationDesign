@@ -18,6 +18,8 @@ App({
     lum:"",//亮度值
     speedSet:"",//当前单片机设定值
     lumSet:"",//当前单片机设定值
+    //接收到了第一个数据，用于刷新界面
+    IsInitData:false,
     mqttOptions: {
       username: "test",
       password: "test",
@@ -29,8 +31,8 @@ App({
 /*
           注册登录部分
 */
-    // isLogin: 'true',//（测试用）跳过登录检查
-    isLogin: 'false',//默认登录状态
+    isLogin: 'true',//（测试用）跳过登录检查
+    // isLogin: 'false',//默认登录状态
     userName: '您未登录',//默认用户名
     userID:'',//学号、员工号
     userType:'',
@@ -78,6 +80,7 @@ App({
       this.data.client.subscribe(this.data.subTopic);
       this.data.client.on("message", (topic, payload) => {
         //数据封装拆解部分
+        this.setValue("IsInitData",true);//接收到了第一个数据，用于刷新界面
         var  msg = payload.toString();
         console.log(msg)
         var mqtt_Data = msg.split("#");
