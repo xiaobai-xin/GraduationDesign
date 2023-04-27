@@ -92,10 +92,11 @@ onChange_light({ detail }){
     this.setData({ 
       checked_led: detail,
     });
+  //调整滑块
     if(detail == true){
-      this.setValue("LED_lum", "100");//转速存入缓存
+      this.setValue("LED_lum", "100");
     }else{
-      this.setValue("LED_lum", "0");//转速存入缓存
+      this.setValue("LED_lum", "0");
     }
     this.publish();
   }
@@ -108,12 +109,12 @@ onChange_fan({ detail }){
     this.setData({ 
       checked_fan: detail,
     });
+    //调整滑块
     if(detail == true){
-      this.setValue("fan_speed", "100");//转速存入缓存
-  
+      this.setValue("fan_speed", "100");
     }
     else{
-      this.setValue("fan_speed", "0");//转速存入缓存
+      this.setValue("fan_speed", "0");
     }
     this.publish();
   }
@@ -124,10 +125,10 @@ onChange_fan({ detail }){
 fan_slider:function(e) {
   if(this.allowUpdate()){
     this.setValue("fan_speed", e.detail.value);//转速存入缓存
-    if(e.detail.value)//开启风扇滑块
+    if(e.detail.value)//开启风扇开关
       this.setValue("checked_fan", true);
-    else  //关闭风扇滑块
-      this.setValue("checked_fan", false);//转速存入缓存
+    else  //关闭风扇开关
+      this.setValue("checked_fan", false);
     this.publish();
   }
 },
@@ -137,10 +138,10 @@ fan_slider:function(e) {
 LED_slider:function(e) {
   if(this.allowUpdate()){
     this.setValue("LED_lum", e.detail.value);//亮度存入缓存
-    if(e.detail.value)//开启LED滑块
+    if(e.detail.value)//开启LED开关
       this.setValue("checked_led", true);
-    else  //关闭LED滑块
-      this.setValue("checked_led", false);//亮度存入缓存
+    else  //关闭LED开关
+      this.setValue("checked_led", false);
     this.publish();
   }
 },

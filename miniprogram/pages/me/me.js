@@ -21,6 +21,8 @@ Page({
   onLoad: function (options) {
     this.setData({
       'formData.username': wx.getStorageSync("formData").username,
+      'userN': wx.getStorageSync("formData").username,
+      'passW': wx.getStorageSync("formData").password,
       'formData.password': wx.getStorageSync("formData").password,
       'formData.checked': wx.getStorageSync('formData').checked
     })
@@ -72,7 +74,6 @@ loginBtnClick:function(){
 login() {
   // 如果勾选"记住密码"选框则存储登录信息，反之则清空存储的信息
   this.data.formData.checked == true ? wx.setStorageSync("formData", this.data.formData) : wx.setStorageSync("formData", "");
-  console.log('发起请求')
   wx.request({
     url: 'https://bishe.xiaobai1103.cn',
     // url: 'http://127.0.0.1:8000',
@@ -83,6 +84,13 @@ login() {
     },
     success:(res)=>{
       if(res.data){
+        if(res.data.indexOf('502') != -1){
+          wx.showModal({
+            title: '提示',
+            content: '连接错误502',
+          })
+          return
+        }
         this.setAppValue("isLogin","true")
         this.setAppValue("userType",res.data[0].type)
         this.setAppValue("userImg",'https://' + res.data[0].profile_photo)
@@ -103,6 +111,12 @@ login() {
           content: '用户名或密码错误',
         })
       }
+    },
+    fail:(res)=>{
+      wx.showModal({
+        title: '提示',
+        content: '连接错误',
+      })
     }
   })
 },
