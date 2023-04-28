@@ -16,6 +16,9 @@ LiquidCrystal_I2C lcd(0x27,16,2); // 创建对象并初始化为 16x2 LCD，I2C�
 #define analog_lum 0 //光敏电阻接口
 #define body_sensor 4//红外
 #define Temp_sensor A3 //温度传感器接口
+#define btnNext 2//next按钮
+#define btnLight 5//电灯开关按钮
+#define btnFan 6//风扇开关按钮
 //串口变量
 String serial_received;//串口接收缓存
 //状态变量
@@ -33,10 +36,22 @@ int lum;//亮度
 //当前控制设定
 int fanSpeed;//当前转速
 int lightLum;//当前亮度
+//LCD1602显示
+int showInfor = 0;
+//案件变量
+volatile uint8_t btnState = LOW;
+volatile uint8_t lastBtnState = LOW;
+volatile unsigned long lastTime = 0;
+int DEBOUNCE_DELAY=1; //消抖时间
+volatile bool btnFlag = false;
 void setup() {
+  //串口初始化
   Serial.begin(9600);
+  //LCD1602初始化
   lcd.init(); 
   lcd.backlight(); 
+  //开启硬件中断（下降沿触发）
+  attachInterrupt(digitalPinToInterrupt(btnNext), btnNextInterrupt, FALLING);
 }
 
 void loop() {
@@ -45,7 +60,31 @@ void loop() {
   Txd();//串口发送
   autoMation();//自动化控制
   Rxd();//串口接收
+  btnNextHandle();
   delay(500);
+}
+/*
+        next按钮处理函数
+*/
+void btnNextHandle(){
+  if(btnFlag){//按钮状态是否发生变化
+    btnFlag = false;
+    if(showInfor)
+      showInfor = 0;
+    else
+      showInfor = 1;    
+  }
+}
+/*
+        next按钮中断
+*/
+void btnNextInterrupt() {
+  uint8_t reading = digitalRead(btnNext);
+  if (reading != btnState && millis() - lastTime > DEBOUNCE_DELAY) {
+    btnState = reading;
+    lastTime = millis();
+    btnFlag = true;
+  }
 }
 
 /*
@@ -81,7 +120,20 @@ void sensorReading(){
   //获取亮度
   lum = analogRead(analog_lum);
 }
+/*
+        LCD1602显示
+*/
 void LCD1602(){
+  lcd.init(); 
+  if(showInfor == 0)
+  showEI();
+  else
+  showCTRL();
+}
+/*
+        显示环境信息
+*/
+void showEI(){
   lcd.setCursor(0,0); 
   lcd.print("Temp: ");
   lcd.print(temp);
@@ -89,6 +141,18 @@ void LCD1602(){
   lcd.setCursor(0,1);
   lcd.print("lum: ");
   lcd.print(lum);
+}
+/*
+        显示控制信息
+*/
+void showCTRL(){
+  lcd.setCursor(0,0); 
+  lcd.print("fanspeed: ");
+  lcd.print(fanSpeed);
+  lcd.print("C  ");
+  lcd.setCursor(0,1);
+  lcd.print("lumSet: ");
+  lcd.print(lightLum);
 }
 /*
         数据发送
