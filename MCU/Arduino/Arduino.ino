@@ -1,7 +1,16 @@
 /*
     date: 20 Apr,2023
+
 */
-// 定义引脚
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(0x27,16,2); // 创建对象并初始化为 16x2 LCD，I2C地址为0x27
+/* 
+        定义引脚
+            A05 为 SCL
+            A04 为 SDL
+*/
 #define analog_fan A1//风扇pwm
 #define analog_light 3//电灯pwm
 #define analog_lum 0 //光敏电阻接口
@@ -26,10 +35,13 @@ int fanSpeed;//当前转速
 int lightLum;//当前亮度
 void setup() {
   Serial.begin(9600);
+  lcd.init(); 
+  lcd.backlight(); 
 }
 
 void loop() {
   sensorReading();//读取传感器
+  LCD1602();
   Txd();//串口发送
   autoMation();//自动化控制
   Rxd();//串口接收
@@ -69,7 +81,15 @@ void sensorReading(){
   //获取亮度
   lum = analogRead(analog_lum);
 }
-
+void LCD1602(){
+  lcd.setCursor(0,0); 
+  lcd.print("Temp: ");
+  lcd.print(temp);
+  lcd.print("C  ");
+  lcd.setCursor(0,1);
+  lcd.print("lum: ");
+  lcd.print(lum);
+}
 /*
         数据发送
         封装格式  #亮度#温度#当前电灯亮度#当前风扇转速
