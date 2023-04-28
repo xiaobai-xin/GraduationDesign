@@ -21,6 +21,8 @@ LiquidCrystal_I2C lcd(0x27,16,2); // 创建对象并初始化为 16x2 LCD，I2C�
 #define btnFan 6//风扇开关按钮
 //串口变量
 String serial_received;//串口接收缓存
+unsigned long previousMillis = 0;
+const unsigned long interval = 1000;//串口发送时间间隔
 //状态变量
 String led_lum = "";
 String fan_speed = "";
@@ -38,12 +40,11 @@ int fanSpeed;//当前转速
 int lightLum;//当前亮度
 //LCD1602显示
 int showInfor = 0;
-//案件变量
-volatile uint8_t btnState = LOW;
-volatile uint8_t lastBtnState = LOW;
+//按键变量
+volatile uint8_t nextBtnState = LOW;
 volatile unsigned long lastTime = 0;
 int DEBOUNCE_DELAY=1; //消抖时间
-volatile bool btnFlag = false;
+volatile bool nextBtnFlag = false;
 void setup() {
   //串口初始化
   Serial.begin(9600);
@@ -57,18 +58,22 @@ void setup() {
 void loop() {
   sensorReading();//读取传感器
   LCD1602();
-  Txd();//串口发送
+  unsigned long currentMillis = millis(); // 获取当前毫秒数
+  if (currentMillis - previousMillis >= interval) { // 判断是否到达发送时间
+    previousMillis = currentMillis; // 更新上一次发送时间
+    Txd();//串口发送 // 发送数据
+  }
   autoMation();//自动化控制
   Rxd();//串口接收
-  btnNextHandle();
-  delay(500);
+  btnHandle();//按键处理
 }
 /*
-        next按钮处理函数
+        按钮处理函数
 */
-void btnNextHandle(){
-  if(btnFlag){//按钮状态是否发生变化
-    btnFlag = false;
+void btnHandle(){
+  //next按钮
+  if(nextBtnFlag){
+    nextBtnFlag = false;
     if(showInfor)
       showInfor = 0;
     else
@@ -80,10 +85,10 @@ void btnNextHandle(){
 */
 void btnNextInterrupt() {
   uint8_t reading = digitalRead(btnNext);
-  if (reading != btnState && millis() - lastTime > DEBOUNCE_DELAY) {
-    btnState = reading;
+  if (reading != nextBtnState && millis() - lastTime > DEBOUNCE_DELAY) {
+    nextBtnState = reading;
     lastTime = millis();
-    btnFlag = true;
+    nextBtnFlag = true;
   }
 }
 
@@ -93,7 +98,7 @@ void btnNextInterrupt() {
 */
 void fanSet(int value){
   fanSpeed = value;
-  value *= 2.55;
+  value = map(value, 0, 100, 0, 255);
   analogWrite(analog_fan, value);
 }
 /*
@@ -102,7 +107,7 @@ void fanSet(int value){
 */
 void lightSet(int value){
   lightLum = value;
-  value *= 2.55;
+  value = map(value, 0, 100, 0, 255);
   analogWrite(analog_fan, value);
 }
 
@@ -115,10 +120,11 @@ void sensorReading(){
   float voltage=0;
   val = analogRead(Temp_sensor);  //读取模拟原始数据    
   voltage= ( (float)val )/1023;
-  voltage *= 5;                   //读取模拟原始数据       
-  temp =  voltage * 100;          //将模拟值转换为实际电压 
+  voltage *= 5;                   //将模拟值转换为实际电压      
+  temp =  voltage * 100;          //电压转化为温度
   //获取亮度
   lum = analogRead(analog_lum);
+  lum = map(lum, 0, 1023, 100, 0); // 映射到 0~100
 }
 /*
         LCD1602显示
@@ -137,7 +143,7 @@ void showEI(){
   lcd.setCursor(0,0); 
   lcd.print("Temp: ");
   lcd.print(temp);
-  lcd.print("C  ");
+  lcd.print("C");
   lcd.setCursor(0,1);
   lcd.print("lum: ");
   lcd.print(lum);
@@ -149,10 +155,11 @@ void showCTRL(){
   lcd.setCursor(0,0); 
   lcd.print("fanspeed: ");
   lcd.print(fanSpeed);
-  lcd.print("C  ");
+  lcd.print("%");
   lcd.setCursor(0,1);
   lcd.print("lumSet: ");
   lcd.print(lightLum);
+  lcd.print("%");
 }
 /*
         数据发送
