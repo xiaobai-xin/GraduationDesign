@@ -102,11 +102,13 @@ void sensorReading(){
   float voltage=0;
   val = analogRead(Temp_sensor);  //读取模拟原始数据    
   voltage= ( (float)val )/1023;
-  voltage *= 5;                   //将模拟值转换为实际电压      
+  voltage *= 5;                   //将模拟值转换为实际电压  
   temp =  voltage * 100;          //电压转化为温度
+  delay(2);
   //获取亮度
   lum = analogRead(analog_lum);
   lum = map(lum, 0, 1023, 100, 0); // 映射到 0~100
+  delay(2);
 }
 /*
         设置风扇转速
@@ -124,7 +126,7 @@ void fanSet(int value){
 void lightSet(int value){
   lightLum = value;
   value = map(value, 0, 100, 0, 255);
-  analogWrite(analog_fan, value);
+  analogWrite(analog_light, value);
 }
 
 /*
