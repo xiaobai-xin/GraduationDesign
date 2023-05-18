@@ -23,14 +23,15 @@ PubSubClient client(espClient);
         初始化
 */
 void setup() {
-    serial_arduino.begin(9600);
-    serial_arduino.listen();
+
     Serial.begin(115200);
     WiFi.begin(ssid, password);
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.println("Connecting to WiFi..");
     }
+    serial_arduino.begin(9600);
+    serial_arduino.listen();
     Serial.println("Connected to the WiFi network");
     //connecting to a mqtt broker
     client.setServer(mqtt_broker, mqtt_port);
